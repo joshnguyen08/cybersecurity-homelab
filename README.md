@@ -9,4 +9,6 @@
 - **Splunk**: Collects and visualizes log data for analysis.
 
 
-Virtualization software: VirtualBox
+- Virtualization software: VirtualBox
+
+**Objective:** Simulate real-world security scenarios using virutal machines and networking tools. 
