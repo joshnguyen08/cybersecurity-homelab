@@ -7,3 +7,6 @@
 - **Kali Linux**: Used for penetration testing and vulnerability assessments.
 - **Windows Server 2022 and Windows 10 Enterprise**: Serve as target machines for various security tests.
 - **Splunk**: Collects and visualizes log data for analysis.
+
+
+Virtualization software: VirtualBox
