@@ -11,4 +11,4 @@
 
 - Virtualization software: VirtualBox
 
-**Objective:** Simulate real-world security scenarios using virutal machines and networking tools. 
+**Objective:** Simulate real-world security scenarios using virtual machines and networking tools. 
