@@ -15,4 +15,8 @@
 
 
 **TODO:**
-Malware Analysis, Security Automation, Traffic and Network Monitoring, Familiarization with Tools
+1. Familiarization with Tools
+2. Traffic and Network Monitoring
+3. Security Automation
+4. Malware Analysis
+5. Reverse Engineering
