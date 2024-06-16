@@ -15,8 +15,4 @@
 
 
 **TODO:**
-
-Malware Analysis
-Security Automation
-Traffic and Network Monitoring
-Familiarization with Tools
+Malware Analysis, Security Automation, Traffic and Network Monitoring, Familiarization with Tools
