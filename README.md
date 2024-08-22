@@ -41,3 +41,5 @@ Motherboard- MSI MAG B650 Tomahawk WiFi Gaming Motherboard (AMD Ryzen 8000/7000,
 CPU - AMD Ryzen 5 7600X 6-Core, 12-Thread Unlocked Desktop Processor
 CPU cooler -  Noctua NH-U12S chromax.Black, 120mm Single-Tower CPU Cooler (Black)
 SSD - SAMSUNG 970 EVO Plus SSD 2TB - M.2 NVMe Interface Internal Solid State Drive with V-NAND Technology (MZ-V7S2T0B/AM)
+
+**Looking to finish / make homelab operational by September**
