@@ -1,1 +1,34 @@
 
+PFsense  Setup 
+
+https://benheater.com/virtualbox-lab-adding-interface-pfsense/  
+
+ 
+
+Prior to initial startup: 
+
+Create NIC adapter 1 to correspond to a NAT connection, adapter 2 to kali subnet, adapter 3 to victim subnet, adapter 4 to secOnion, adapter 5 to serve as span port, adapter 6 to serve as splunk subnet 
+
+Adding adapter 5: 
+
+.\VBoxManage.exe modifyvm "pfsense" --nic5 intnet 
+
+.\VBoxManage.exe modifyvm "pfsense" --nictype5 82540EM 
+
+.\VBoxManage.exe modifyvm "pfsense" --intnet5 "spanPort" 
+
+.\VBoxManage.exe modifyvm "pfsense" --cableconnected5 on 
+
+ 
+
+Adding adapter 6: 
+
+.\VBoxManage.exe modifyvm "pfsense" --nic6 intnet 
+
+.\VBoxManage.exe modifyvm "pfsense" --nictype6 82540EM 
+
+.\VBoxManage.exe modifyvm "pfsense" --intnet6 "splunk" 
+
+.\VBoxManage.exe modifyvm "pfsense” --cableconnected6 on 
+
+ 
