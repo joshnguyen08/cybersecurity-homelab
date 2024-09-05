@@ -42,4 +42,37 @@ CPU - AMD Ryzen 5 7600X 6-Core, 12-Thread Unlocked Desktop Processor
 CPU cooler -  Noctua NH-U12S chromax.Black, 120mm Single-Tower CPU Cooler (Black)
 SSD - SAMSUNG 970 EVO Plus SSD 2TB - M.2 NVMe Interface Internal Solid State Drive with V-NAND Technology (MZ-V7S2T0B/AM)
 
-**Looking to finish / make homelab resume normal operations by September**
+**In-progress of redoing**
+
+Setup and Download: 
+
+ 
+
+Virtualization: 
+
+https://www.virtualbox.org/wiki/Downloads 
+
+Pfsense: 
+
+https://www.pfsense.org/download/  
+
+Security Onion: 
+https://github.com/Security-Onion-Solutions/securityonion/blob/master/VERIFY_ISO.md  
+
+https://ubuntu.com/download/desktop  
+
+Kali Linux: 
+
+https://www.kali.org/get-kali/#kali-virtual-machines  
+
+Window Machine: 
+
+https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2019  
+
+https://www.microsoft.com/en-us/evalcenter/evaluate-windows-10-enterprise  
+
+Splunk: 
+
+https://ubuntu.com/download/server  
+
+https://www.splunk.com/  
