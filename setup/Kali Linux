@@ -1,1 +1,36 @@
 
+Kali Linux Setup 
+
+ 
+
+Download the VirtualBox image for Kali Linux and add it into virtualbox 
+
+ 
+
+Make sure it is configured to “kali” internal network adapter on VirtualBox to correspond with pfsense’s subnet for it. 
+
+ 
+
+Virtualbox configuration: (image attached)
+
+ 
+
+ 
+
+Use “passwd” to change default password (pin+heem) 
+
+ 
+
+Access the pfsense’s virtual interface via https://192.168.1.1  
+
+Before doing so, make sure kali linux has a set connection utilizing the correct subnet of 192.168.1.1/24 and the default gateway of 192.168.1.1 
+
+ 
+
+In my case, Kali Linux is set manually via 192.168.1.10 but DHCP is also enabled on this interface.  
+
+ 
+
+ 
+
+    
