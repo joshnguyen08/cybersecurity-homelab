@@ -1,1 +1,134 @@
 
+Security Onion  Setup 
+
+ 
+
+Let it load up and put in username (heem) and password (PIN+heem) 
+
+https://github.com/Security-Onion-Solutions/securityonion/blob/2.4/main/DOWNLOAD_AND_VERIFY_ISO.md  
+
+ 
+
+“2.4.100-20240903 ISO image released on 2024/09/03” 
+
+ 
+
+Virtualbox Setup: 
+
+ 
+
+ 
+
+Set the static IP of the SecOnion server to correspond with pfsense’s subnet of 192.168.2.100/24 
+
+ 
+
+Create an account as well (heemanalyst@gmail.com)   + (pin+heem) 
+
+ 
+
+Analyst will reside in 192.168.2.15 
+
+ 
+
+ 
+
+ 
+
+Issue: 
+
+ 
+
+Solution: I believe this issue was caused because I chose the subnet seconion as the management NIC instead of the NAT. 
+
+Its using secOnion subnet which isn't configured yet in pfsense to perform an installation and it's failing to pull data from an external source while using that NIC. 
+
+ 
+
+ 
+
+After Security Onion is done, we can now begin with our analyst computer 
+
+ 
+
+Follow the steps after this section to learn how to create an analyst machine, and once this is made go back to the secOnion server, use “sudo so-allow" 
+
+ 
+
+Create an analyst role for the IP set for that analyst machine, 192.168.1.15 in this case 
+
+ 
+
+Analysts should now be able to access the web interface of security onion.  
+
+ 
+
+Run sudo so-status to verify everything is up and running: 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Security Onion Analyst Machine 
+
+ 
+
+Using a Ubuntu Desktop ISO image, create a VM 
+
+ 
+
+Pick all default options for initial set-up and configurations 
+
+ 
+
+Manually set the IP to an allowed one (the one you set during secOnion installation) 
+
+ 
+
+Access the security onion interface via the IP address given after setup of Security Onion VM 
+
+ 
+
+IP: 192.168.2.15 
+
+ 
+
+Issue: I can’t acces the security onion web interface 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Solution: 
+
+Try: 
+
+ sudo so-firewall includehost analyst <IP ADDRESS> 
+
+ 
+
+Issue: 
+
+So-soc container has “missing” status 
+
+ 
+
+Solution: 
+
+Run “sudo so-restart soc” 
+
+ 
+
+ 
+
+Access the security onion server via 192.168.2.100 
