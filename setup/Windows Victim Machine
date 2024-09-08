@@ -1,1 +1,174 @@
 
+Windows 2022 DC Server and Enterprise Users 
+
+ 
+
+Windows 2022 DC Setup 
+
+ 
+
+Download the ISO from microsoft’s page 
+
+ 
+
+Set up the virtual machine 
+
+ 
+
+Version should be “Windows Server 2022 standard Evaluation (Desktop Experience)” 
+
+ 
+
+Select “Custom Install”, confirm defaults 
+
+ 
+
+Create an Administrator account with password (AwesomeSauce24) 
+
+ 
+
+Make sure to rename the computer to an appropriate one (HEEM-DC) and reboot 
+
+ 
+
+“Server Manager” should automatically start now. 
+
+ 
+
+Go to “Manage” > “Add Roles and Features” > Click “next” until you get to “Server roles” > Check the box for “Active Directory Domain Services” > click “next” until you get to Confirmation > hit “Install” 
+
+ 
+
+Wait for the installation to complete > Click on the yellow flag that appears now > click “Promote this server to domain controller” > Click “add a new forest” > Specify a domain name (heem.local) > set a restore password (AwesomeTurtle24)  > click “next” until prequisites > Click “Install” > reboot 
+
+ 
+
+Wait for reboot to complete > go back to “Add roles and features” > add “Active Directory Certificate Services” > click “Next” until you get to install > wait for yellow flag 
+
+ 
+
+Click “Configure Active Directory Certificate Services on the destination server“ >  On “Role Services”, click “Certification Authority” > Click “next” on all defaults, make sure to set validity period to 99 years or something > reboot 
+
+ 
+
+Adding Users to the ADUC (Active Directory Users and Computers) 
+
+Go to “Tools” > Go “Active Directory Users and Computers” > Now create a new user under the correct domain. You should see the prompt below:  
+
+ 
+
+Example: 
+
+davis.black (BlackSword45) 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Adjusting Password Policies: 
+
+ 
+
+ 
+
+Go to “Tools” on server manager > “Group Policy Management” > Go to your domain under “Domains” and double click > You should see “Default Domain Policy” now right-click, press “Edit” > Go to “Computer Configuration” > “Policies” > “Windows Settings” > “Security Settings” > “Account Policies” > “Password Policy”  
+
+ 
+
+You should see screen similar to the picture below: 
+
+ 
+
+ 
+
+ 
+
+ 
+
+Setting up Internet Access / Connectivity 
+
+ 
+
+Right click on network icon on task bar > "Network and Internet Settings”  > Find your adapter, right-click and hit “Properties” > Click “Internet Protocol Version 4 (TCP/IPV4)” > Click “properties” > Set the appropriate IP and default gateway 
+
+ 
+
+ 
+
+ 
+
+Confirm via the “ipconfig” command from PowerShell to ensure changes were made succesfully 
+
+ 
+
+ 
+
+Setting up Windows 11 User to join the domain 
+
+Download the iso image 
+
+Windows 11 Enterprise | Microsoft Evaluation Center 
+
+ 
+
+Create the virtualbox  with appropriate settings 
+
+ 
+
+Follow the steps, do custom install (same as DC) 
+
+ 
+
+Uncheck all the additional features like location, Cortona, etc. 
+
+ 
+
+Create the name + password corresponding to the account made earlier in the DC setup for user account 
+
+ 
+
+Make sure to change the PC-name to correspond 
+
+ 
+
+Go to the network adapter settings  
+
+ 
+
+Set up the TCP/IPv4 properties, we will give Davis an IP (192.168.3.12) 
+
+-We will also use the default gateway of 192.168.3.1 and the DNS server of DC controller which is 192.168.3.10 
+
+ 
+
+ 
+
+You should see it change from default to the below via ipconfig 
+
+ 
+
+ 
+
+Now search for “Access work or school” 
+
+ 
+
+Hit “Connect” > “join this device to a local Active Directory domain” 
+
+ 
+
+It should prompt you with a login, sign in with administrator for DC server with its password 
+
+ 
+
+Select “skip” if it tries to make you edit the stuff and just restart it afterwards 
+
+ 
+
+Confirm via your DC ADUC that you can see the new computer listed 
