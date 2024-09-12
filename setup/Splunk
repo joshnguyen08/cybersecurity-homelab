@@ -1,1 +1,165 @@
 
+Splunk Setup: **PICTURES REDACTED**
+
+ 
+
+Click through all the default settings until you reach profile page: 
+
+Splunkheem +pinheem 
+
+ 
+
+Click the check to openSSH server  
+
+ 
+
+It will run installation, and you will be prompted to remove the CDROM  
+
+ 
+
+Save a snapshot, and then adjust the boot order to put hard disk first.  
+
+ 
+
+Reboot and log in with your username and password you made: 
+
+ 
+
+We will need to have a GUI view, so run this for a lightweight option: 
+
+sudo apt install xubuntu-desktop 
+
+ 
+Download splunk free here: 
+
+https://www.splunk.com/en_us/download/splunk-cloud.html  
+
+ 
+
+ 
+
+Do sudo reboot and you should have the GUI for ubuntu-server VM 
+
+ 
+
+CD to the downloads directory and run “tar xvzf” on the splunk zip 
+
+ 
+
+ 
+
+Problem: Help, I need more storage on my VM but don’t want to completely restart 
+
+Solution: 
+
+Go to program files > ORacle > virtualbox > ./Vboxmanage  in powershell 
+
+./VboxManage modifyhd "C:\Users\heemh\VirtualBox VMs\splunk\splunk.vdi" --resize 51200  
+
+This will set the GB to 50 
+
+ 
+
+Go to spunk server after unzipping, then go to /bin 
+
+Run ./splunk start 
+
+ 
+
+Splunk should now be accessible http://splunk:8000 
+
+ 
+
+ 
+
+ 
+
+Go to the web inteface > Settings > “Forwarding and receiving” > Set up an instance to receive data forward from other instances via port 9997 
+
+ 
+
+After, go to settings > “Indexes” > create a new index for “wineventlog” > press “save” 
+
+-This will be used to receive window event logs via splunk universal forwarder from windows DC 
+
+ 
+
+Make sure the IP of the splunk server is 192.168.4.15  
+
+ 
+
+Receiving Windows Event Logs 
+
+ 
+
+Go download “Splunk Universal Forwarder” from the splunk website on your windows 2022 DC server 
+
+Deployment server is an optional step but go ahead and do it anyways, set the port to the default 8089 
+
+ 
+
+Setting up receiving indexer is next, make sure this is set to 9997 port which is where we will send our windows event log to Splunk at: 
+
+ 
+
+ 
+
+Click install to install the Splunk universal forwarder 
+
+ 
+
+ 
+
+Go back to splunk server > settings > “add data” > “forward”  
+
+ 
+
+If you’ve done this step right, you should see the windows DC host under “Available hosts” 
+
+Click that and hit next 
+
+ 
+
+ 
+
+If you hit next and you do not see “Local Event Logs” as a option to select as source, then you need to go to settings > “Data inputs” > go down to forwarded inputs > select “Windows Event logs” and continue from there 
+
+ 
+
+Next step, select ‘wineventlog” as the index 
+
+ 
+
+Completed setup: 
+
+ 
+
+Go here if you want to add more data to source out from the DC:  
+
+Settings > “data inputs” > “windows event logs”  
+
+To view all logs, go to the search > query index=”wineventlogs” 
+
+Helpful queries: 
+
+Index=”wineventlog”  sourcetype=”wineventlog:security” 
+
+Querying security windows event logs for specific device / user: 
+
+Index=”wineventlog”  sourcetype=”wineventlog:security” Account_Name=”DAVIS-BLACK-PC$” 
+
+ 
+
+Problem: My ubuntu server hosting splunk has a different timezone 
+
+ 
+
+Solution: 
+
+Check timezone via timedatectl command 
+
+Sudo timedatectl set-timezone America/Indiana/Indianapolis 
+
+sudo systemctl restart systemd-timesyncd 
+
+ 
