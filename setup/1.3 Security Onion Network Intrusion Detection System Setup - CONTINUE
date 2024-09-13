@@ -1,0 +1,32 @@
+Prior understanding for setup: **PICTURE REDACTED**
+
+Traffic from the victim network is bridged to the SPAN port (OPT3), meaning all the traffic passing through the victim network will be mirrored to this interface (OPT3), which in turn is connected to Security Onion. 
+
+ 
+
+We need to ensure the spanPort network adapter under Security Onion server is running under promiscuous mode to capture all traffic on that interface, not just traffic for the security onion server itself. 
+
+ 
+
+Zeek for comprehensive network traffic logging. (proactive network logging)
+
+Suricata for detecting known network-based threats and anomalies. (when shit gets serious)
+
+Kibana for visualizing and querying alerts and logs. (SIEM TOOL)
+
+ 
+
+Go into security onion and go into Kibana 
+
+ 
+
+KQL query will go: 
+
+ 
+
+source.ip: exists & source.ip:192.168.3.10 
+ 
+
+Ideally, if we want to monitor the whole subnet, query: 
+
+source.ip is between 192.168.3.1 to 192.168.3.255 
