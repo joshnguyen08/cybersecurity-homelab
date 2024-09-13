@@ -1,0 +1,97 @@
+ 
+
+Purpose: Establish a remote connection using VNC (Virtual Network Computing) on my Kali Linux that allows my external Mac to remote in 
+
+ 
+
+ 
+
+Kali Linux setup (Where we are remoting to) 
+
+ 
+
+Install the VNC server using these commands: 
+
+sudo apt update 
+
+sudo apt install tightvncserver 
+
+vncserver  
+
+ 
+
+Use this command to kill the process after starting so we can configure it: 
+
+vncserver –kill :1 
+
+ 
+
+In your xstartup file located in ~/.vnc/xstartup: 
+
+Put in this line of code to make sure the desktop environment starts: 
+
+startxfce & 
+
+ 
+
+Then do: 
+
+chmod +x ~/.vnc/xstartup 
+
+ 
+
+Start the VNC server now with a desired resolution, which can be adjusted: 
+
+vncserver –geometry 1280x720 
+
+ 
+
+The above will host a VNCserver with a process ID of x, depending on how many you got running 
+
+ 
+
+ 
+
+Since Kali Linux sits in a pfsense subnet and it has a private IP, we need to set up port forwarding on the pfsense to access the VNC server from the internet 
+
+ 
+
+Go to pfsense > Firewall > NAT > Port Forward 
+
+ 
+
+Add a rule that uses the WAN interface with TCP protocol, destination of WAN address with a destination port range of only 5901 which constitutes VNC’s default port. 
+
+Redirect Target IP should be set to the private IP of the kali linux VM and port 5901 
+
+Apply and save changes, it should look like the picture below: 
+
+ 
+
+ 
+
+ 
+
+In order to secure our connection, we have to use openSSH to tunnel the VNC connection over SSH 
+
+ 
+
+Sudo apt install openssh-server 
+
+Sudo systemctl start ssh 
+
+Sudo systemctl enable ssh 
+
+ 
+
+ 
+
+Access remotely: 
+
+ssh -L 5901:localhost:5901 username@<pfSense_Public_IP> 
+
+ 
+
+ 
+
+However, my WAN interface is behind a double NAT configuration so this will be more challenging, will leave for now.  
