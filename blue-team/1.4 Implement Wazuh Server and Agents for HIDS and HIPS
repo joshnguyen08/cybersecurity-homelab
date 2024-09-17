@@ -1,0 +1,61 @@
+1.4 Implement Wazuh Server and Agents for HIDS/HIPS 
+
+https://blog.securityonion.net/2023/08/security-onion-24-has-reached-general.html  
+
+ 
+
+https://docs.securityonion.net/en/2.4/elastic-fleet.html  
+
+Evaluation mode in Security Onion does not support adding Elastic agents. Evaluation mode is designed for a quick installation for testing Security Onion, but it is not intended for production use. 
+
+ 
+
+We will find another solution to employ, preferably free and open source for security agents.  
+
+ 
+
+Wazuh and its agent? https://wazuh.com/  
+
+ 
+
+https://documentation.wazuh.com/current/installation-guide/index.html  
+
+ 
+
+Run this command to install Wazuh server: 
+
+ 
+
+curl -sO https://packages.wazuh.com/4.9/wazuh-install.sh && sudo bash ./wazuh-install.sh -a 
+
+ 
+
+It will install indexer, server, and dashboard components 
+
+User: admin 
+
+Password: r7XYeKlkPd89a+l+uM3VjasH.MDuy1ut 
+
+ 
+
+Access Wazuh through loopback IP – https://127.0.0.1:443 
+
+ 
+
+You can change this but you first have to do: 
+
+Sudo tar –xvf wazuh-install-files.tar 
+
+Sudo nano config.yml 
+
+ 
+
+Now you can change IP 
+
+ 
+
+I assigned each of the 3 servers to 192.168.2.101  
+
+ 
+
+TODO: need to figure out bug, need to adjust IP as it still starts up on loopback interface 
