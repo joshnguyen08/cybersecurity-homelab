@@ -1,5 +1,3 @@
-1.4 Implement Wazuh Server and Agents for HIDS/HIPS 
-
 https://blog.securityonion.net/2023/08/security-onion-24-has-reached-general.html  
 
  
@@ -34,7 +32,7 @@ It will install indexer, server, and dashboard components
 
 User: admin 
 
-Password: r7XYeKlkPd89a+l+uM3VjasH.MDuy1ut 
+Password: QKm6tKMd1Uq2iZfDsFC.L*L6+w021qCu 
 
  
 
@@ -54,8 +52,54 @@ Now you can change IP
 
  
 
-I assigned each of the 3 servers to 192.168.2.101  
+I assigned each of the 3 servers to 192.168.2.150 - which is my Wazuh analyst VM static IP  
 
  
 
-TODO: need to figure out bug, need to adjust IP as it still starts up on loopback interface 
+Endpoint Wazuh Agent Deployment 
+
+We will now deploy a wazuh agent 
+
+ 
+
+Go to the wazuh server based on your IP above > server management> endpoint summary > “Deploy new agent” 
+
+ 
+
+Select the OS to install the agent on, windows in this case. 
+
+ 
+
+Then set the server address to 192.168.2.150, this is where the agent connects to 
+
+ 
+
+Set the group as “default” for now with agent name left alone as well 
+
+ 
+
+Now you’re instructed to run a command through powershell on the endpoint device, go ahead and do this 
+
+ 
+
+ 
+
+Then do “NET START WazuhSvc” 
+
+ 
+
+See picture below for successful deployment: 
+
+ 
+
+ 
+
+Go back to the Wazuh server and you should see a new endpoint detected as active 
+
+ 
+
+Wazuh endpoint agents have been deployed to the DC server and windows 11 enterprise domain user (2 deployments in total) 
+
+ 
+
+TODO: Use the configuration assessment to perform endpoint hardening  
