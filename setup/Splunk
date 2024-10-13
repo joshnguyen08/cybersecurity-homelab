@@ -23,7 +23,11 @@ Save a snapshot, and then adjust the boot order to put hard disk first.
 
 Reboot and log in with your username and password you made: 
 
- 
+
+
+Threat hunting resource:
+
+https://www.splunk.com/en_us/blog/security/hunting-with-splunk-the-basics.html
 
 We will need to have a GUI view, so run this for a lightweight option: 
 
