@@ -1,0 +1,13 @@
+Here is quick overview of this new VM: 
+
+Elasticsearch for storing logs and data. 
+
+Kibana for visualizing the data from Zeek and Suricata. 
+
+Logstash (optional, depending on whether you want to parse and enrich logs before sending to Elasticsearch). 
+
+Zeek for network traffic analysis (metadata on connections, DNS, HTTP, etc.). 
+
+Suricata for intrusion detection and prevention (IDS/IPS) by analyzing traffic for suspicious patterns. 
+
+Go back to 1.7 and source logs from Wazuh Server to the newly ELK VM 
