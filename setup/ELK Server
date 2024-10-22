@@ -1,3 +1,11 @@
+Objective: 
+
+I want to remove security onion and install a fresh server running elastic stack, which will employ Zeek and Suricata. Zeek will process traffic from our SPAN port which mirrors traffic from our victim subnet. 
+
+https://www.elastic.co/downloads  
+
+ 
+
 Here is quick overview of this new VM: 
 
 Elasticsearch for storing logs and data. 
@@ -11,3 +19,663 @@ Zeek for network traffic analysis (metadata on connections, DNS, HTTP, etc.).
 Suricata for intrusion detection and prevention (IDS/IPS) by analyzing traffic for suspicious patterns. 
 
 Go back to 1.7 and source logs from Wazuh Server to the newly ELK VM 
+
+ 
+
+Create VM with Ubuntu Live Server, 4 Cores, 16 GB of RAM, 200 GB of storage 
+
+ 
+
+Run through Ubuntu server set up: 
+
+Name: heemelk 
+
+Server name: elkheem 
+
+Username and password is same for all VMs 
+
+ 
+
+Once it’s done installing: 
+
+We will need to have a GUI view, so run this for a lightweight option: 
+
+sudo apt update 
+
+sudo apt upgrade -y 
+
+ sudo apt install xubuntu-desktop 
+
+Sudo reboot 
+
+ 
+
+ 
+
+2. Install Elasticsearch 
+
+https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html  
+
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg  
+
+-Command wil download GPG key for verifying elasticsearch packages from website, it ensures we download the right one 
+
+sudo apt-get install apt-transport-https 
+
+-installs apt-transport https, which allows apt to fetch packages over HTTPS 
+
+echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list 
+
+-enables us to install Elasticsearch with future updates from elastic’s official repository, using GPG key to verify 
+
+sudo apt-get update && sudo apt-get install elasticsearch 
+
+-fetches latest package information and installs it 
+
+ 
+
+Confirm it’s installed: 
+
+Sudo systemctl status elasticsearch 
+
+ 
+
+3. Install Kibana 
+
+Install Kibana with Debian package | Kibana Guide [8.15] | Elastic  
+
+Sudo apt-get update && sudo apt-get install kibana 
+
+Since you've already added the Elastic GPG key and the repository during the Elasticsearch installation, you do not need to repeat those steps for Kibana. 
+
+ 
+
+Confirm it’s installed: 
+
+Sudo systemctl status kibana 
+
+ 
+
+ 
+
+4. Install Zeek and configuring to monitor SPAN port interface 
+
+Primary Role: Network traffic analysis and protocol logging. 
+
+Installing Zeek — Book of Zeek (git/master)  
+
+https://zeek.org/  
+
+ 
+
+echo 'deb http://download.opensuse.org/repositories/security:/zeek/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/security:zeek.list 
+
+- This command adds the Zeek repository to your system’s package sources, so apt can pull Zeek packages from it. 
+
+ 
+
+curl -fsSL https://download.opensuse.org/repositories/security:zeek/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/security_zeek.gpg > /dev/null 
+
+-This fetches the GPG key for the repository and installs it on your system, allowing apt to verify that the packages are authentic and haven't been tampered with. 
+
+ 
+
+sudo apt update && sudo apt install zeek-6.0 
+
+- Updates your package lists to include the new Zeek repository and allows you to install 
+
+ 
+
+Confirm the installation 
+
+Sudo find / -name “zeek” 
+
+ 
+
+How to add zeek to PATH: 
+
+nano ~/.bashrc 
+
+Input this at bottom: 
+
+export PATH=$PATH:/opt/zeek/bin 
+
+source ~/.bashrc 
+
+ 
+
+Now  zeek –version should work anywhere 
+
+ 
+
+5. Install Suricata 
+
+Primary Role: Network intrusion detection and prevention (NIDS/NIPS). 
+
+https://suricata.io/download/  
+
+https://docs.suricata.io/en/suricata-7.0.7/install.html#ubuntu-from-personal-package-archives-ppa  
+
+sudo apt-get install software-properties-common 
+
+- The add-apt-repository command is used to add external PPAs (Personal Package Archives) like the one for Suricata. Without software-properties-common, you wouldn't be able to easily add these repositories. 
+
+sudo add-apt-repository ppa:oisf/suricata-stable 
+
+- This command adds the official Suricata stable PPA from the Open Information Security Foundation (OISF) to your system’s list of package sources. 
+
+sudo apt-get update 
+
+sudo apt-get install suricata 
+
+ 
+
+Confirm by running: 
+
+Suricata –version 
+
+sudo apt-get update && sudo apt-get install logstash 
+
+ 
+
+6. Install Logstash 
+
+https://www.elastic.co/guide/en/logstash/current/installing-logstash.html  
+
+ 
+
+sudo apt-get update && sudo apt-get install logstash 
+
+ 
+
+Confirm it is installed: 
+
+Sudo find / -name “logstash” 
+
+ 
+
+7. Install Filebeats 
+
+sudo apt-get update 
+
+sudo apt-get install filebeat 
+
+ 
+
+8. Implement Wazuh Logs into Kibana 
+
+ 
+
+How to make the ELK stack functional 
+
+sudo systemctl start elasticsearch 
+
+sudo systemctl enable elasticsearch 
+
+-make it start at boot 
+
+sudo systemctl status elasticsearch 
+
+-Should be active and running now 
+
+ 
+
+sudo systemctl start kibana 
+
+sudo systemctl enable kibana 
+
+sudo systemctl status kibana 
+
+ 
+
+sudo systemctl start logstash 
+
+sudo systemctl enable logstash 
+
+sudo systemctl status logstash 
+
+ 
+
+sudo /opt/zeek/bin/zeekctl deploy 
+
+ 
+
+http://localhost:5601 to access Kibana now 
+
+ 
+
+If it’s first time, you’ll need enrollment token to set up Kibana: 
+
+sudo /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana 
+
+Then it asks for a verificaiton code from Kibana; 
+
+sudo journalctl -u kibana –f  
+
+-use this to find the code 
+
+Now it’s set up for new users 
+
+ 
+
+ 
+
+Username and password is: 
+
+User: elastic 
+
+Pass: pin + heem 
+
+ 
+
+To reset password: 
+
+sudo /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic 
+
+ 
+
+-Disabled xpack for /etc/elasticsearch/elasticsearch.yml 
+
+-Set http://localhost as well to elasticsearch.yml 
+
+-Set http://localhost as well to kibana.yml 
+
+-Set http://localhost as well to filebeat.yml for output 
+
+ 
+
+ 
+
+ 
+
+How to make zeek capture traffic from our SPAN port interface: 
+
+ 
+
+Use “ip a” 
+
+We can see spanPOrt is on our enp0s8 interface 
+
+Open the Zeek configuration file: 
+
+sudo nano /opt/zeek/etc/node.cfg 
+
+ 
+
+Change this block: 
+
+[zeek] 
+
+type=worker 
+
+host=localhost 
+
+interface= enp0s8 # Replace with your actual SPAN interface name 
+
+ 
+
+To start zeek, we have to deploy via its ctl tool: 
+
+Sudo /opt/zeek/bin/zeetctl deploy 
+
+ 
+
+To check we would need to use zeekctl 
+
+If you haven’t added a PATH for it, you can do 
+
+Sudo /opt/zeek/bin/zeetctl status 
+
+ 
+
+ 
+
+To stop zeek: 
+
+Sudo /opt/zeek/bin/zeetctl stop 
+
+ 
+
+To check if logs are being populated, they are stored in various files depending on where what traffic you have: 
+
+sudo cat /opt/zeek/logs/current/conn.log 
+
+sudo cat /opt/zeek/logs/current/dns.log 
+
+-many more other logs 
+
+ 
+
+After you run the stop command above, it will create an archive of the date “2024-10-20" for example in the  /opt/zeek/logs directory 
+
+ 
+
+ 
+
+ 
+
+We’re going to pivot over to Filebeats for Zeek logs since theres too much overhead with Logstash since they have zeek module 
+
+sudo apt-get update 
+
+sudo apt-get install filebeat 
+
+sudo filebeat modules enable zeek 
+
+sudo nano /etc/filebeat/modules.d/zeek.yml 
+
+ 
+
+Input this 
+
+# Module: zeek 
+
+# Docs: https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-module-zeek.html 
+
+  
+
+- module: zeek 
+
+  connection: 
+
+    enabled: true 
+
+    var.paths: ["/opt/zeek/logs/current/conn.log"] 
+
+  
+
+  dns: 
+
+    enabled: true 
+
+    var.paths: ["/opt/zeek/logs/current/dns.log"] 
+
+  
+
+  http: 
+
+    enabled: true 
+
+    var.paths: ["/opt/zeek/logs/current/http.log"] 
+
+  
+
+  files: 
+
+    enabled: true 
+
+    var.paths: ["/opt/zeek/logs/current/files.log"] 
+
+  
+
+  ssl: 
+
+    enabled: true 
+
+    var.paths: ["/opt/zeek/logs/current/ssl.log"] 
+
+  
+
+  notice: 
+
+    enabled: true 
+
+    var.paths: ["/opt/zeek/logs/current/notice.log"] 
+
+  
+
+  weird: 
+
+    enabled: true 
+
+    var.paths: ["/opt/zeek/logs/current/weird.log"] 
+
+  
+
+  # Optional paths for additional Zeek logs 
+
+  #capture_loss: 
+
+  #  enabled: true 
+
+  #  var.paths: ["/opt/zeek/logs/current/capture_loss.log"] 
+
+ 
+
+sudo nano /etc/filebeat/filebeat.yml 
+
+output.elasticsearch: 
+
+  hosts: ["localhost:9200"] 
+
+  username: "elastic"  # If you have security enabled 
+
+  password: "your_password"  # If you have security enabled 
+
+ 
+
+Confirm everything works: 
+
+sudo filebeat test config 
+
+ 
+
+sudo systemctl start filebeat 
+
+sudo systemctl enable filebeat 
+
+ 
+
+Ensure filebeats has access to zeek logs : 
+
+Use Chmod 
+
+ 
+
+Go to filebeat.yml 
+
+filebeat.inputs: 
+
+- type: log 
+
+  enabled: true 
+
+  paths: 
+
+    - /opt/zeek/logs/current/conn.log 
+
+  
+
+  processors: 
+
+    - dissect: 
+
+        tokenizer: "%{ts}\t%{uid}\t%{src_ip}\t%{src_port}\t%{dest_ip}\t%{dest_port}\t%{protocol}\t%{service}\t%{duration}\t%{orig_bytes}\t%{resp_bytes}\t%{conn_state}\t%{local_orig}\t%{missed_bytes}\t%{history}\t%{orig_pkts}\t%{orig_ip_bytes}\t%{resp_pkts}\t%{resp_ip_bytes}\t%{tunnel_parents}" 
+
+        field: "message" 
+
+        target_prefix: "zeek.conn" 
+
+ 
+
+ 
+
+ 
+
+Use the custom dissect processor to parse the Zeek logs properly. 
+
+Get those crucial traffic-related fields extracted from the message field. 
+
+ 
+
+ 
+
+GOT IT WORKING! 
+
+https://www.youtube.com/watch?v=L5dj4cGgIIA  
+
+sudo find / -name "local.zeek" 
+
+cd /opt/zeek/share/zeek/site/local.zeek 
+
+Insert "@load policy/tuning/json-logs.zeek" at the bottom 
+
+  
+
+sudo zeekctl check - to check status of new config 
+
+sudo zeekctl deploy - deploy newly config 
+
+  
+
+Now our log file is in JSOn, so filebeat can send it over 
+
+ 
+
+Update Elasticsearch, Kibana and Filebeat to point to IP instead of locahost  
+
+IP should be pointed to 192.168.2.125 which corresponds to ELK server 
+
+sudo nano /etc/elasticsearch/elasticsearch.yml 
+
+ 
+
+Input: 
+
+network.host: 192.168.2.125 
+
+http.port: 9200 
+
+ 
+
+sudo nano /etc/kibana/kibana.yml 
+
+Input: 
+
+elasticsearch.hosts: [http://192.168.2.125:9200] 
+
+Server.host: “192.168.2.125” 
+
+ 
+
+ 
+
+sudo nano /etc/filebeat/filebeat.yml 
+
+Input: 
+
+output.elasticsearch: 
+
+  hosts: [http://192.168.2.125:9200] 
+
+ 
+
+Make sure to use systemctl to restart all of the above 
+
+8. Implement Wazuh Logs into Kibana 
+
+https://wazuh.com/blog/detection-with-elastic-stack-integration/  
+
+On the wazuh server: 
+
+sudo apt-get update 
+
+sudo apt-get install logstash 
+
+sudo /usr/share/logstash/bin/logstash-plugin install logstash-output-elasticsearch 
+
+ 
+
+Configure index template: 
+
+sudo mkdir -p /etc/logstash/templates 
+
+sudo curl -o /etc/logstash/templates/wazuh.json https://packages.wazuh.com/integrations/elastic/4.x-8.x/dashboards/wz-es-4.x-8.x-template.json 
+
+ 
+
+Configure pipeline: 
+
+sudo nano /etc/logstash/conf.d/wazuh-elasticsearch.conf 
+
+Input: 
+
+input { 
+
+  file { 
+
+    id => "wazuh_alerts" 
+
+    codec => "json" 
+
+    start_position => "beginning" 
+
+    path => "/var/ossec/logs/alerts/alerts.json" 
+
+    mode => "tail" 
+
+    ecs_compatibility => "disabled" 
+
+  } 
+
+} 
+
+  
+
+output { 
+
+  elasticsearch { 
+
+    hosts => "http://192.168.2.125:9200" 
+
+    index  => "wazuh-alerts-4.x-%{+YYYY.MM.dd}" 
+
+    user => '${ELASTICSEARCH_USERNAME}' 
+
+    password => '${ELASTICSEARCH_PASSWORD}' 
+
+    template => "/etc/logstash/templates/wazuh.json" 
+
+    template_name => "wazuh" 
+
+    template_overwrite => true 
+
+  } 
+
+} 
+
+Securely Store Elasticsearch Credentials in Logstash 
+
+sudo /usr/share/logstash/bin/logstash-keystore --path.settings /etc/logstash create 
+
+sudo /usr/share/logstash/bin/logstash-keystore --path.settings /etc/logstash add ELASTICSEARCH_USERNAME 
+
+sudo /usr/share/logstash/bin/logstash-keystore --path.settings /etc/logstash add ELASTICSEARCH_PASSWORD 
+
+ 
+
+sudo systemctl start logstash 
+
+sudo systemctl enable logstash 
+
+ 
+
+Allow logstash to read wazuh log files 
+
+sudo usermod -a -G wazuh logstash 
+
+ 
+
+Verify configs: 
+
+sudo systemctl stop logstash 
+
+sudo -E /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/wazuh-elasticsearch.conf --path.settings /etc/logstash/ 
+
+-You should see no errors 
+
+ 
+
+Now go to ELK server - > stack management - > you should see wazuh index -> create a data view for it 
+
+Now wazuh is implemeneted 
