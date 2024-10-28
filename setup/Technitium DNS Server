@@ -1,0 +1,122 @@
+-The purpose of this project was recommended by Garrett from Central Insurance, it seeks to provide practical application to NDSSEC and DNS over HTTPS. 
+
+-DNS blocking to prevent malicious or privacy-invasive domains from being resolved on your network 
+
+https://technitium.com/dns/  
+
+check out this repo for a great collection of DNS blocklists to choose from: https://github.com/hagezi/dns-blocklists  
+
+ 
+
+Technitium DNS Server is an open source authoritative as well as recursive DNS server that can be used for self hosting a DNS server for privacy & security. It works out-of-the-box with no or minimal configuration and provides a user friendly web console accessible using any modern web browser. 
+
+ 
+
+We will use our Splunk VM to host docker container for our DNS server: 
+
+sudo apt update 
+
+sudo apt install docker.io 
+
+sudo systemctl enable --now docker 
+
+ 
+
+Verify installation: 
+
+docker –version 
+
+ 
+
+Helpful docker commands 
+
+Docker ps – list running containers 
+
+docker ps –a – lists all containers 
+
+Docker stop {container name} 
+
+Docker rm {container name} 
+
+docker start {container name} 
+
+ 
+
+ 
+
+Grab the docker image: 
+
+Docker pull technitium/dns-server:latest 
+
+ 
+
+Now use docker run: 
+
+docker run -d \ 
+
+  --name technitium-dns \ 
+
+  -p 53:53/tcp \ 
+
+  -p 53:53/udp \ 
+
+  -p 5380:5380/tcp \ 
+
+  -v /opt/technitium-dns:/etc/dns/config \ 
+
+  Technitium/dns-server:latest 
+
+ 
+
+If there’s an port conflict- 
+
+sudo lsof -i :53 
+
+-use this to check what service is currently using port 53 
+
+ 
+sudo systemctl stop systemd-resolved 
+
+sudo systemctl disable systemd-resolved 
+
+ 
+
+Now use sudo docker ps to see if the container is running, it should be 
+
+Go to http://192.168.4.15:5380 
+
+Change default password for admin 
+
+ 
+
+Go to settings -> DNS Server IPv4 Source addresses -> put in 8.8.8.8 and 8.8.4.4 
+
+ 
+
+Test the functionality of new DNS server: 
+
+nslookup google.com 192.168.4.15 
+
+ 
+
+ 
+
+ 
+
+Now to integrate to our network 
+
+ 
+
+Go to pfsense -> system -> general setup -> add 192.168.4.15 to primary DNS 
+
+ 
+
+This forces all DNS queries in the network to go to the new Technetium DNS server 
+
+ 
+
+Issue now would be our victim subnet doesn’t allow inbound rule to reach technitium DNS server 
+
+We need to allow TCP/UDP port 53 firewalls 
+
+Everything shoujld work now. 
