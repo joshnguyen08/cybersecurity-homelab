@@ -1,0 +1,57 @@
+ Blue: 
+
+Preparation 
+
+Wazuh agents deployed on DC server and domain user machines 
+
+Splunk SIEM pulling local windows event logs + wazuh logs 
+
+ELK stack monitoring using zeek via mirrored traffic through span port + wazuh logs 
+
+Identification 
+
+Splunk Identification, Event Code 15 , Message = “Updated Windows Defender status successfully to SECURITY_PRODUCT_STATE_SNOOZED 
+
+Event ID 5379: "Credential Manager credentials were read" 
+
+Event ID: 4672 
+
+ 
+
+ELK Server Identification, outbound traffic towards 192.168.1.12 at destination port 4444 
+
+ 
+
+ 
+
+Containment 
+
+Restrict all connection to/from 192.168.3.12 
+
+Eradication 
+
+Scan the machine using malware scan 
+
+Check for registry edits through logs / scheduled tasks and services / startups 
+
+Terminate all malicious processes / remove malicious files 
+
+ 
+
+Recovery 
+
+Return the machine to a known good snapshot / backup 
+
+Reset passwords 
+
+Monitor systems post-recovery / reinforce access controls 
+
+Test System Functionality for persistence through reboots 
+
+Lessons Learned 
+
+Post-incident review (WIP) 
+
+Documentation 
+
+Update IR plan / implement security awareness measures 
