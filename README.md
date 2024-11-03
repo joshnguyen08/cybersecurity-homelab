@@ -12,15 +12,7 @@
 
 - **Virtualization software**: VirtualBox
 
-**Objective:** Simulate real-world security scenarios using virtual machines and networking tools. 
-
-
-**TODO:**
-1. Familiarization with Tools
-2. Traffic and Network Monitoring
-3. Security Automation
-4. Malware Analysis
-5. Reverse Engineering
+**Objective:** Simulate real-world security scenarios using virtual machines and networking tools and gain hands-on experience to red-teaming and blue teaming concepts. 
 
 
 ## My current homelab:
