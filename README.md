@@ -85,3 +85,31 @@ ELK Server:
 https://www.elastic.co/downloads  
 https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html  
 https://www.elastic.co/guide/en/kibana/8.15/deb.html#deb-repo
+
+
+
+
+## Network Segmentation:
+
+### 192.168.1.1/24 (Pen-testing and attack simulations VMs):
+
+Kali Linux (192.168.1.10)
+
+### 192.168.2.1/24 (Security & Monitoring):
+
+Security Onion (192.168.2.100) for IDS/IPS.
+
+Wazuh (192.168.2.150) for endpoint monitoring.
+
+ELK server (192.168.2.125) for SIEM
+
+### 192.168.3.1/24 (Windows/Victim Domain):
+
+Windows Server 2022 (DC) managing Active Directory.
+
+Windows 11 victim machine (192.168.3.12) for attack simulations.
+
+### 192.168.4.1/24 (Splunk and DNS interface):
+
+Splunk (192.168.4.15) collecting logs from pfSense, Security Onion, Wazuh, and Windows machines.
+
