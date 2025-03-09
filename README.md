@@ -89,27 +89,77 @@ https://www.elastic.co/guide/en/kibana/8.15/deb.html#deb-repo
 
 
 
-## Network Segmentation:
+# Network Segmentation:
 
-### 192.168.1.1/24 (Pen-testing and attack simulations VMs):
+### pfSense: 
 
-Kali Linux (192.168.1.10)
+Default web interface: 192.168.1.1 
 
-### 192.168.2.1/24 (Security & Monitoring):
+#### Network: 
 
-Security Onion (192.168.2.100) for IDS/IPS.
+ADAPTER 1: Bridged Adapter 
 
-Wazuh (192.168.2.150) for endpoint monitoring.
+Adapter 2: Internal network, “kali” 
 
-ELK server (192.168.2.125) for SIEM
+Adapter 3: Internal Network, “secOnion” 
 
-### 192.168.3.1/24 (Windows/Victim Domain):
+Adapter 4: Internal Network, “victim” 
 
-Windows Server 2022 (DC) managing Active Directory.
+Adapter 5: Internal network, “spanPort” 
 
-Windows 11 victim machine (192.168.3.12) for attack simulations.
+Adapter 6: Internal Network, “splunk” 
 
-### 192.168.4.1/24 (Splunk and DNS interface):
+## 192.168.1.1/24 (Pen-testing and attack simulations VMs):
 
-Splunk (192.168.4.15) collecting logs from pfSense, Security Onion, Wazuh, and Windows machines.
+### Kali Linux (192.168.1.10)
+
+#### Network: 
+
+Adapter 1: internal network, “kali” 
+
+## 192.168.2.1/24 (Security & Monitoring):
+
+### Security Onion (192.168.2.100) for IDS/IPS.
+
+#### Network: 
+
+Adapter 1: internal network, “secOnion” 
+
+Adapter 2: internal network, “spanPort” 
+
+### Wazuh (192.168.2.150) for endpoint monitoring.
+
+#### Network:  
+
+Adapter 1: internal network, “secOnion” 
+
+### ELK server (192.168.2.125) for SIEM
+
+#### Network: 
+
+Adapter 1: internal network, “secOnion” 
+
+Adapter 2: internal network, “spanPort” 
+
+## 192.168.3.1/24 (Windows/Victim Domain):
+
+### Windows Server 2022 (DC) managing Active Directory.
+
+#### Network: 
+
+Adapter 1: internal network, ”victim” 
+
+### Windows 11 victim machine (192.168.3.12) for attack simulations.
+
+#### Network: 
+
+Adapter 1: internal network, ”victim” 
+
+## 192.168.4.1/24 (Splunk and DNS interface):
+
+### Splunk (192.168.4.15) collecting logs from pfSense, Security Onion, Wazuh, and Windows machines.
+
+#### Network: 
+
+Adapter 1: internal network, ”splunk” 
 
