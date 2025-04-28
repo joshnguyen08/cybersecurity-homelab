@@ -8,8 +8,8 @@ https://www.youtube.com/watch?v=rSH4Uv390zc
 - **Security Onion**: Provides network security monitoring, intrusion detection, and traffic analysis.
 - **Kali Linux**: Used for penetration testing and vulnerability assessments.
 - **Windows Server 2022 and Windows 10 Enterprise**: Serve as target machines for various security tests.
-- **Splunk**: Collects and visualizes log data for analysis. (Receives Windows Event Logs, Wazuh Logs)
-- **ELK Server**: Collects and visualizes log data for analysis. (Receives Windows Event Logs, Wazuh Logs, Network Traffic from Zeek packet capture via SPAN port)
+- **Splunk**: Collects and visualizes log data for analysis. (Receives Windows Event Logs [SUF], Wazuh Logs [SUF], Zeek logs [SUF])
+- **ELK Server**: Collects and visualizes log data for analysis. (Receives Windows Event Logs [Winlogbeat], Wazuh Logs [Logstash], Network Traffic from Zeek packet capture via SPAN port [Filebeat])
 - **Wazuh**: HIDS/HIPS with EDR functionalities and SIEM. 
 
 - **Virtualization software**: VirtualBox
